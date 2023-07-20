@@ -68,26 +68,41 @@ include_directories(
 ## Declare a cpp library
 add_library(${PROJECT_NAME}_core
    src/Algorithm.cpp
+   src/grasp_exec.cpp
+   src/grasp_det.cpp
 )
 target_compile_features(${PROJECT_NAME}_core INTERFACE cxx_std_11)
 
 ## Declare cpp executables
-add_executable(${PROJECT_NAME}
+add_executable(${PROJECT_NAME}_grasp_node
 #  src/${PROJECT_NAME}_node.cpp
 #  src/RosPackageTemplate.cpp
-  src/grasp_exec.cpp
+  # src/grasp_exec.cpp
   src/grasp_exec_node.cpp
-  src/grasp_det_node.cpp
-  src/grasp_det.cpp
+  # src/grasp_det_node.cpp
+  # src/grasp_det.cpp
 )
-target_compile_features(${PROJECT_NAME} INTERFACE cxx_std_11)
+
+## Declare cpp executables
+add_executable(${PROJECT_NAME}_det_node
+#  src/${PROJECT_NAME}_node.cpp
+#  src/RosPackageTemplate.cpp
+  # src/grasp_exec.cpp
+  src/grasp_det_node.cpp
+  # src/grasp_det_node.cpp
+  # src/grasp_det.cpp
+)
+target_compile_features(${PROJECT_NAME}_det_node INTERFACE cxx_std_11)
 
 ## Add dependencies to exported targets, like ROS msgs or srvs
 add_dependencies(${PROJECT_NAME}_core
   ${catkin_EXPORTED_TARGETS}
 )
 
-add_dependencies(${PROJECT_NAME}
+add_dependencies(${PROJECT_NAME}_det_node
+  ${catkin_EXPORTED_TARGETS}
+)
+add_dependencies(${PROJECT_NAME}_grasp_node
   ${catkin_EXPORTED_TARGETS}
 )
 
@@ -96,7 +111,11 @@ target_link_libraries(${PROJECT_NAME}_core
   ${catkin_LIBRARIES}
 )
 
-target_link_libraries(${PROJECT_NAME}
+target_link_libraries(${PROJECT_NAME}_det_node
+  ${PROJECT_NAME}_core
+  ${catkin_LIBRARIES}
+)
+target_link_libraries(${PROJECT_NAME}_grasp_node
   ${PROJECT_NAME}_core
   ${catkin_LIBRARIES}
 )
@@ -107,7 +126,7 @@ target_link_libraries(${PROJECT_NAME}
 
 # Mark executables and/or libraries for installation
 install(
-  TARGETS ${PROJECT_NAME} ${PROJECT_NAME}_core
+  TARGETS ${PROJECT_NAME}_grasp_node ${PROJECT_NAME}_det_node ${PROJECT_NAME}_core
   ARCHIVE DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   LIBRARY DESTINATION ${CATKIN_PACKAGE_LIB_DESTINATION}
   RUNTIME DESTINATION ${CATKIN_PACKAGE_BIN_DESTINATION}

@@ -1,7 +1,7 @@
 <launch>
 
   <!-- Launch ROS Package Template Node -->
-  <node pkg="ros_package_template" type="ros_package_template" name="grasp_det" output="screen">
+  <node pkg="ros_package_template" type="ros_package_template_grasp_node" name="grasp_det" output="screen">
     <rosparam command="load" file="$(dirname)/../config/default.yaml" />
 
   </node>
